@@ -3,11 +3,12 @@ import java.util.*;
 
 @Getter
 public class PokerHand implements Comparable<PokerHand> {
-    private ArrayList<PlayingCard> cards = new ArrayList<>();
-    private Integer status = 1000000;//по умолчанию самая слабая
+    final private ArrayList<PlayingCard> cards = new ArrayList<>();
+    final private Integer status;
 
     public PokerHand(String expression) {
-        String[] items = expression.split("\\s");
+        expression = expression.toUpperCase();
+        String[] items = expression.split("\\s+");
         if (items.length != 5) {
             throw new IllegalArgumentException("IllegalCardsNumberArgument");
         }
@@ -31,7 +32,7 @@ public class PokerHand implements Comparable<PokerHand> {
         for (PlayingCard card : cards) {
             str += " " + card.getName();
         }
-        return str.substring(1) + " " + status;
+        return str.substring(1);
     }
 
     @Override
