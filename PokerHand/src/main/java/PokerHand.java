@@ -42,18 +42,19 @@ public class PokerHand implements Comparable<PokerHand> {
 
     private int defineStatus() {
         boolean flash = true;
-        boolean street = true;
-
         for (int i = 1; flash && (i < 5); i++) {
             flash = flash && (cards.get(0).suit == cards.get(i).suit);
         }
-        for (int i = 1; street && (i < 5) ; i++) {
+
+        boolean twoAndAce = (cards.get(0).value.ordinal() == 0) && (cards.get(4).value.ordinal() == 12);
+        boolean street = twoAndAce || (cards.get(3).value.ordinal() == cards.get(4).value.ordinal() - 1);
+        for (int i = 1; street && (i < 4) ; i++) {
             street = street && (cards.get(i - 1).value.ordinal() == cards.get(i).value.ordinal() - 1);
         }
 
-        //1-9 стрит-флеш
+        //1-10 стрит-флеш
         if (flash && street) {
-            return 9 - cards.get(0).value.ordinal();
+            return twoAndAce ? 10 : (9 - cards.get(0).value.ordinal());
         }
 
         boolean r1 = (cards.get(0).value == cards.get(1).value);
@@ -88,9 +89,9 @@ public class PokerHand implements Comparable<PokerHand> {
                     - (v2 - 2) * 100 - (v1 - 1) * 10 - v0;
         }
 
-        //80092-80100 стрит
+        //80092-80101 стрит
         if (street) {
-            return 80100 - v0;
+            return twoAndAce ? 80101 : (80100 - v0);
         }
 
         //80819-82973 тройка
